@@ -14,12 +14,15 @@ import {
 } from "@/components/ui/card";
 import { DeleteApplicationButton } from "@/features/delete-application/ui/DeleteApplicationButton";
 import { UpdateApplicationForm } from "@/features/update-application/ui/UpdateApplicationForm";
+import { useAuthStore } from "@/shared/stores/authStore";
+import { UpdateApplicationStatus } from "@/features/update-application/ui/UpdateApplicationStatus";
 
 interface ApplicationDetailsProps {
   id: string;
 }
 
 export function ApplicationDetails({ id }: ApplicationDetailsProps) {
+  const user = useAuthStore((s) => s.user);
   const { data, isLoading, isError } = useQuery<IApplication>({
     queryKey: ["application", id],
     queryFn: () => fetchApplicationById(id),
@@ -29,7 +32,7 @@ export function ApplicationDetails({ id }: ApplicationDetailsProps) {
     switch (status) {
       case "approved":
         return {
-          color: "text-foreground-accent",
+          color: "text-green-600",
           Icon: CheckCircle,
           label: "Одобрено",
         };
@@ -47,6 +50,10 @@ export function ApplicationDetails({ id }: ApplicationDetailsProps) {
 
   if (isLoading) {
     return <Skeleton className="w-full h-72" />;
+  }
+
+  if (user === null) {
+    return <p>Загрузка пользователя</p>;
   }
 
   if (isError || !data) {
@@ -86,11 +93,21 @@ export function ApplicationDetails({ id }: ApplicationDetailsProps) {
           </span>
         </div>
         <div className="space-x-2">
-          <DeleteApplicationButton applicationId={String(data.id)} />
-          <UpdateApplicationForm
-            applicationId={String(data.id)}
-            initialMotivation={data.motivation}
-          />
+          {user.role === "employer" && (
+            <UpdateApplicationStatus
+              applicationId={String(data.id)}
+              prevStatus={data.status}
+            />
+          )}
+          {user.role === "student" && (
+            <div className="space-x-2">
+              <UpdateApplicationForm
+                applicationId={String(data.id)}
+                initialMotivation={data.motivation}
+              />
+              <DeleteApplicationButton applicationId={String(data.id)} />
+            </div>
+          )}
         </div>
       </CardFooter>
     </Card>

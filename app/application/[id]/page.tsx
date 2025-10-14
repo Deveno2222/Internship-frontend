@@ -1,6 +1,6 @@
 import { ApplicationDetails } from "@/entities/application/ui/ApplicationDetails";
 
-export default async function ApplicationPage({
+export default async function ApplicationDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;

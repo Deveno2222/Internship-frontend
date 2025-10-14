@@ -12,7 +12,15 @@ export function Header() {
   const { theme, setTheme } = useTheme();
   const { user } = useAuthStore();
 
-  console.log(user);
+  if (!user) {
+    return (
+      <header className="min-h-18 flex items-center border-b bg-background">
+        <div className="container mx-auto px-4 py-2">
+          <p>Загрузка...</p>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="min-h-18 flex items-center border-b-1 bg-background">
@@ -39,6 +47,22 @@ export function Header() {
           >
             Контакты
           </Link>
+          {user.role === "employer" && (
+            <Link
+              href={"/application"}
+              className="rounded-[12px] py-2 px-4 hover:bg-secondary/90 transition-colors"
+            >
+              Заявки
+            </Link>
+          )}
+          {user.role === "teacher" && (
+            <Link
+              href={"/students"}
+              className="rounded-[12px] py-2 px-4 hover:bg-secondary/90 transition-colors"
+            >
+              Студенты
+            </Link>
+          )}
         </nav>
         <div className="space-x-4 flex items-center">
           <Button

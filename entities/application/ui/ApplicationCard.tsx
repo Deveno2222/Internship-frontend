@@ -19,7 +19,7 @@ export function ApplicationCard({ application }: ApplicationCardProps) {
   const getStatusProps = (status: IApplication["status"]) => {
     switch (status) {
       case "approved":
-        return { color: "text-foreground-accent", Icon: CheckCircle };
+        return { color: "text-green-600", Icon: CheckCircle };
       case "rejected":
         return { color: "text-destructive", Icon: XCircle };
       case "pending":

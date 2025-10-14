@@ -13,6 +13,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { updateApplication } from "../api/api";
+import { toast } from "sonner";
 
 interface UpdateApplicationFormProps {
   applicationId: string;
@@ -33,7 +34,11 @@ export function UpdateApplicationForm({
       queryClient.invalidateQueries({
         queryKey: ["application", applicationId],
       });
+      toast.success("Заявка успешно обновлена!")
     },
+    onError: () => {
+      toast.error("Произошла ошибка. Повторите попытку позже!")
+    }
   });
 
   const handleSubmit = async (e: React.FormEvent) => {

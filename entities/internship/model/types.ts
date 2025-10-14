@@ -2,8 +2,8 @@ export interface IInternship {
   id: number;
   title: string;
   description: string;
-  employer: number;
-  start_date: string;
-  end_date: string;
+  location: string;
+  status: "open" | "closed" | "in_progress" | "finished";
   created_at: string;
+  employer: number;
 }

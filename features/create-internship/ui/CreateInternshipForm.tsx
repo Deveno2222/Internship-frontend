@@ -50,7 +50,9 @@ export function CreateInternshipForm() {
     mutationFn: (data: ICreateInternship) => createInternship(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["internships"] });
-      toast.success("Стажировка успешно создана!");
+      setIsOpen(false);
+      form.reset();
+      setIsOpen(false);
     },
     onError: () => {
       toast.error("Произошла ошибка во время создания стажировки");
@@ -58,15 +60,16 @@ export function CreateInternshipForm() {
   });
 
   const onSubmit = async (data: ICreateInternship) => {
-    try {
-      mutation.mutate(data);
-    } catch (error) {
-      console.error(error);
-    }
+    mutation.mutate(data);
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) form.reset();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline">Создать</Button>
       </DialogTrigger>
